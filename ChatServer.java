@@ -10,19 +10,15 @@ public class ChatServer {
 	private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
 
 	public static void main(String[] args) {
-		int portNumber;
+		int portNumber = 9000;;
 		
-		if (args.length > 1) {
+		if (args.length < 1) {
 			System.out.println("Usage: java ChatServer <port number=9000>");
-			System.exit(1);
+			return;
 		}
-		
-		if (args.length == 1)
+		else if (args.length == 1)
 			portNumber = Integer.parseInt(args[0]);
-		else
-			portNumber = 9000;
-		
-		
+
 		try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
 			System.out.println("Server is listening on port " + portNumber);
 			
@@ -32,8 +28,8 @@ public class ChatServer {
 		} catch (IOException e) {
 			System.out.println("Exception when listening on port " + portNumber);
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
- 
 	}
 	
 	private static class Handler extends Thread {
@@ -76,11 +72,10 @@ public class ChatServer {
 					for (PrintWriter writer: writers) {
 						writer.println(name + ": " + message);
 					}
-				
 				}
-			
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
+				e.printStackTrace();
 			} finally {
 				if (name != null)
 					names.remove(name);

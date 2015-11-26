@@ -5,9 +5,9 @@ public class ChatClient {
 
 	public static void main(String[] args) {
 	
-		if (args.length != 2) {
+		if (args.length < 2) {
 			System.out.println("Usage: java ChatClient [ServerIP] [Port Number=9000]");
-			System.exit(1);
+			return;
 		}
 		
 		String serverIP = args[0];
@@ -25,10 +25,12 @@ public class ChatClient {
 			}
 		} catch (UnknownHostException e) {
 			System.err.println("Don't know about server " + serverIP);
-			System.exit(1);
+			e.printStackTrace();
+			return;
 		} catch (IOException e) {
 			System.err.println("Couldn't connect to " + serverIP);
-			System.exit(1);
+			e.printStackTrace();
+			return;
 		} 
 	}
 
