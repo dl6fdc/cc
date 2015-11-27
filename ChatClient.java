@@ -4,15 +4,15 @@ import java.net.*;
 public class ChatClient {
 
 	public static void main(String[] args) {
-	
+
 		if (args.length < 2) {
 			System.out.println("Usage: java ChatClient [ServerIP] [Port Number=9000]");
 			return;
 		}
-		
+
 		String serverIP = args[0];
 		int portNumber = Integer.parseInt(args[1]);
-		
+
 		try (
 			Socket clientSocket = new Socket(serverIP, portNumber);
 			PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -33,6 +33,4 @@ public class ChatClient {
 			return;
 		} 
 	}
-
 }
-
