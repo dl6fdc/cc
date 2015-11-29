@@ -20,9 +20,24 @@ public class ChatClient {
 			BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 		) {
 			while (true) {
-				System.out.println(in.readLine());
-				out.println(stdin.readLine());
+				if(clientSocket.isConnected()){
+					String line = in.readLine();
+					if(line.equalsIgnoreCase("exit")) {
+						System.out.println(" >>> >>> >>> ending chat");
+						clientSocket.close();
+						break;
+						}
+					System.out.println(line);
+					System.out.flush();
+					out.println(stdin.readLine());
+					out.flush();
+				}
+				else {
+					System.out.println("Connection to server lost");
+					break;
+					}
 			}
+			clientSocket.close();
 		} catch (UnknownHostException e) {
 			System.err.println("Don't know about server " + serverIP);
 			e.printStackTrace();
