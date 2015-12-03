@@ -18,14 +18,15 @@ public class ChatServer {
 	public static void main(String[] args) {
 		int portNumber = 9000;;
 		
-		if (args.length < 1) {
+		if (args.length != 1) {
 			System.out.println("Usage: $ java ChatServer <port number>");
 			System.out.println("e.g.: $ java ChatServer 9000");
 			return;
 		}
-		else
-			portNumber = Integer.parseInt(args[0]);
-			credentials.putAll(readCredentials(credentialsFile));
+	
+		portNumber = Integer.parseInt(args[0]);
+		
+		credentials.putAll(readCredentials(credentialsFile));
 			
 		try (ServerSocket serverSocket = new ServerSocket(portNumber)) {
 			System.out.println("Server is listening on port " + portNumber);
@@ -46,9 +47,9 @@ public class ChatServer {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String line = br.readLine();
-			System.out.println(line);
+			//System.out.println(line);
 			while((line=br.readLine())!=null){
-				System.out.println(line + " ");
+				//System.out.println(line + " ");
 				if(line.contains(",")) {
 					String[] split = line.split(",");
 					if(split.length == 2){
@@ -91,6 +92,7 @@ public class ChatServer {
 		Handler(Socket s) {
 			clientSocket = s;
 		}
+		
 		public void run() {
 			try {
 				
@@ -109,9 +111,7 @@ public class ChatServer {
 					String password = in.readLine();
 					System.out.println("Read Password : " + password);
 					if (name == null) {
-						out.println("No userName given");
-						out.flush();
-						out.println("breaking connection");
+						out.println("No userName given...breaking connection");
 						out.flush();
 						closeALL();
 						return;
@@ -140,9 +140,7 @@ public class ChatServer {
 				}
 
 				if(!match){
-					out.println("password did not match for " + name);
-					out.flush();
-					out.println("breaking connection");
+					out.println("password did not match for " + name + " ... breaking connection");
 					out.flush();
 					closeALL();
 					return;
@@ -159,7 +157,7 @@ public class ChatServer {
 				
 				for(int i=0; i < sockets.size(); ){
 					if(sockets.get(i).isConnected()){
-						writers.get(i).println(" >>> >>> >>> " + name + " has joined the chat <<< <<< <<<" + clientSocket);
+						writers.get(i).println(" >>> >>> >>> " + name + " has joined the chat <<< <<< <<<");
 						writers.get(i).flush();
 						i++;
 					}
@@ -180,6 +178,7 @@ public class ChatServer {
 					if (message == null)
 						return;
 					for (PrintWriter writer: writers) {
+						//System.out.println(message);
 						writer.println(name + " : " + message);
 						writer.flush();
 					}
@@ -187,6 +186,7 @@ public class ChatServer {
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
+				
 			} finally {
 				if (name != null)
 					names.remove(name);
